@@ -1,0 +1,26 @@
+body {
+    font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    background: #f7f7f9;
+    color: #222;
+    margin: 0;
+}
+.container {
+    max-width: 640px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 24px 32px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+h1 { color: #1c5d99; }
+a { color: #1c5d99; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul { line-height: 1.9; }
+.price { font-size: 1.2em; font-weight: bold; }
+.id { color: #888; }
+.hint { margin-top: 24px; color: #555; font-size: .9em; }
+code {
+    background: #eef1f5;
+    padding: 1px 5px;
+    border-radius: 4px;
+}

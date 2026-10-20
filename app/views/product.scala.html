@@ -1,0 +1,13 @@
+@*
+ * The product detail page. It receives ONE product from ProductController
+ * and prints its details. The `@` symbol means "insert a value here".
+ *@
+@(product: models.Product)
+
+@main(s"Product: ${product.name}") {
+    <p><a href="@routes.HomeController.index()">&larr; Back to all products</a></p>
+
+    <h1>@product.name</h1>
+    <p class="price">Price: $@product.price</p>
+    <p class="id">Product id: @product.id</p>
+}

@@ -1,0 +1,22 @@
+@*
+ * This is the shared page "layout". Other views call it to get the common
+ * HTML shell (the <head>, the stylesheet link, the <body> wrapper).
+ *
+ * It takes two arguments:
+ *   title   -> the text for the browser tab
+ *   content -> the actual page body, passed in by the calling view
+ *@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@title</title>
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
+    </head>
+    <body>
+        <div class="container">
+            @content
+        </div>
+    </body>
+</html>

@@ -1,0 +1,8 @@
+target/
+/logs/
+/tmp/
+.idea/
+*.iml
+dist/
+.bsp/
+RUNNING_PID

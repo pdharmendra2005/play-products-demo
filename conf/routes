@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+# Read each line as:   METHOD   URL-pattern   ->   code to run
+#
+# When a request comes in, Play scans this file top to bottom and runs the
+# FIRST line whose METHOD + URL matches. If nothing matches you get a 404.
+
+# The home page -> lists all products
+GET     /                     controllers.HomeController.index()
+
+# Our star example: GET /products/:id
+# ":id" is a placeholder. A request to /products/42 sends 42 in as `id`.
+GET     /products/:id         controllers.ProductController.show(id: Long)
+
+# Serve static files (css, js, images) from the /public folder
+GET     /assets/*file         controllers.Assets.versioned(path="/public", file: Asset)

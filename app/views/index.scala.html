@@ -1,0 +1,25 @@
+@*
+ * The home page. It receives the list of products from HomeController and
+ * builds a link to each product's detail page.
+ *@
+@(products: Seq[models.Product])
+
+@main("All products") {
+    <h1>Products</h1>
+    <p>Click a product to open its detail page (this uses <code>GET /products/:id</code>).</p>
+    <ul>
+        @for(product <- products) {
+            <li>
+                <a href="@routes.ProductController.show(product.id)">
+                    @product.name
+                </a>
+                &mdash; $@product.price
+            </li>
+        }
+    </ul>
+    <p class="hint">
+        Try these URLs directly in your browser:
+        <br><code>/products/1</code>, <code>/products/42</code>,
+        and a missing one <code>/products/999</code> (you'll get a 404).
+    </p>
+}
