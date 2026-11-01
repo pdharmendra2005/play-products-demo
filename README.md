@@ -73,3 +73,6 @@ This is exactly how your developers work in IntelliJ.
 Want to know where products would live in a real app? Read
 [docs/mongodb-document-guide.md](docs/mongodb-document-guide.md). It covers
 MongoDB, what a "document" is, and where it lives, with two sketches.
+
+How does a `.scala.html` page connect to its controller? Read
+[docs/view-controller-guide.md](docs/view-controller-guide.md).
