@@ -67,3 +67,9 @@ Notice the difference between the last two: one is "route matched but no data"
 While `sbt run` is running, change some text in `app/views/product.scala.html`,
 save, and refresh the browser. Play recompiles automatically — no restart needed.
 This is exactly how your developers work in IntelliJ.
+
+## Next: MongoDB
+
+Want to know where products would live in a real app? Read
+[docs/mongodb-document-guide.md](docs/mongodb-document-guide.md). It covers
+MongoDB, what a "document" is, and where it lives, with two sketches.
