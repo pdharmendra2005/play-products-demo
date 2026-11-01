@@ -256,6 +256,65 @@ Clean up afterwards: `exit`, then `docker rm -f mongo-try`.
 
 ---
 
+## Part 7: Brick 7, Step 4 in slow motion (`collection.find(...)` → `Document` → `Product`)
+
+In the Brick 7 version of the app, a `ProductRepository` does the MongoDB work.
+Its code most likely looks like this (compare it with your real file):
+
+```scala
+def findById(id: Long): Option[Product] =
+  Option(collection.find(Filters.eq("id", id)).first()).map(toProduct)
+
+private def toProduct(doc: Document): Product =
+  Product(doc.getLong("id"), doc.getString("name"), BigDecimal(doc.get("price").toString))
+```
+
+**Important:** in this code, `Document` is a **Scala/Java class**
+(`org.bson.Document`), an object in your app's memory. It is **not** the file
+on disk.
+
+Read the first line inside-out:
+
+| Sub-step | Code | What really happens | Sent to MongoDB yet? |
+|---|---|---|---|
+| 4a | `collection` | a handle/address made once at startup: `localhost:27017` → `shop` → `products`. Not data. | no |
+| 4b | `Filters.eq("id", 42)` | builds the question `{ "id": 42 }` | no |
+| 4c | `.find(filter)` | prepares the query (lazy) | no |
+| 4d | `.first()` | **now** the driver sends it to `mongod`. It searches `products` and reads from disk. Your code waits. | **yes** |
+| 4e | (inside the driver) | the bytes (BSON) come back and become an `org.bson.Document` **in RAM**: `_id -> ObjectId(...)`, `id -> 42`, `name -> "Monitor"`, `price -> 199.99` | done |
+| 4f | `.map(toProduct)` | copies the fields from `Document` into your own `Product`. The repository is the translator, so the rest of the app never sees MongoDB. | done |
+| 4g | `Option(...)` | `.first()` gives `null` when nothing matched: `Option(null)` = `None`, otherwise `Some(product)` | done |
+
+`_id` vs `id`: `_id` is MongoDB's own key (an `ObjectId` it added
+automatically). `id` is **your** field, and it's the one the filter searches.
+
+### Steps 5–7: back up the stack
+
+5. `Option[Product]` goes repository → service → controller. The `match` picks
+   `Some(product) => Ok(views.html.product(product))` or `None => NotFound`.
+6. `views.html.product(product)` is a function Play generated from
+   `product.scala.html`. It fills in `@product.name` and the other fields, and
+   `main.scala.html` wraps it in the layout. The result is an HTML string.
+7. `Ok(html)` = status **200** + `Content-Type: text/html` + that HTML. Play
+   sends it to the browser.
+
+### Product 42 changes shape 4 times
+
+```
+on disk (mongod's .wt files) → Document (RAM, 4e) → Product (RAM, 4f) → HTML text (6) → browser
+```
+
+QA catches: a document with no `price` crashes `toProduct` (500). `mongod`
+down → `.first()` waits, then throws (500). Id 999 → `None` → 404, but only
+because the controller handles `None` on purpose.
+
+> **Check 7:** (1) At which sub-step does the request leave your app? (2) For
+> `/products/999`, what does `.first()` return, what does `Option(...)` make of
+> it, and which line makes the 404? (3) Which field does `Filters.eq("id", 42)`
+> search, `_id` or `id`, and who created the other one?
+
+---
+
 ## Answers (cover these until you've tried)
 
 <details><summary>Show answers</summary>
@@ -269,5 +328,8 @@ Clean up afterwards: `exit`, then `docker rm -f mongo-try`.
 - **5:** `mongod` sends back an empty result (no documents). The service
   turns that into `None` (step 9), and the controller turns `None` into
   `NotFound` (404).
+- **7:** (1) 4d, `.first()`. (2) `null` → `None` → the controller's
+  `case None => NotFound(...)`. (3) `id`, your own field. MongoDB created
+  `_id` automatically.
 
 </details>
