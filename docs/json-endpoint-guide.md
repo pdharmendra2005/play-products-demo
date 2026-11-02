@@ -2,6 +2,10 @@
 
 ![JSON endpoint sketch](json-endpoint-sketch.png)
 
+**The whole journey in one picture** (Browser → Play → MongoDB → Play → Browser):
+
+![Full journey sketch](full-journey-sketch.png)
+
 Up to Brick 7, the app answered with **HTML pages** for a person using a browser.
 API tests (curl, Postman, REST Assured) want **JSON**: plain data with no page
 around it. In this brick you add a second URL that returns the **same product**

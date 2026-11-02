@@ -79,3 +79,6 @@ How does a `.scala.html` page connect to its controller? Read
 
 Brick 8: the same product as JSON (`GET /api/products/:id`), for API tests. Read
 [docs/json-endpoint-guide.md](docs/json-endpoint-guide.md).
+
+The whole request journey on one page:
+[docs/full-journey-sketch.png](docs/full-journey-sketch.png).
