@@ -76,3 +76,6 @@ MongoDB, what a "document" is, and where it lives, with two sketches.
 
 How does a `.scala.html` page connect to its controller? Read
 [docs/view-controller-guide.md](docs/view-controller-guide.md).
+
+Brick 8: the same product as JSON (`GET /api/products/:id`), for API tests. Read
+[docs/json-endpoint-guide.md](docs/json-endpoint-guide.md).
